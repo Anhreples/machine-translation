@@ -30,7 +30,8 @@ class Encoder(nn.Module):
         self.hidden_size = hidden_size
         self.modified = modified
         self.embedding = nn.Embedding(self.vocab_size, self.embedding_dim)
-        self.gru = nn.GRU(self.embedding_dim, self.hidden_size, batch_first=True, bidirectional=True)
+        self.gru = nn.LSTM(self.embedding_dim, self.hidden_size, batch_first=True, bidirectional=True)
+        # self.gru = nn.GRU(self.embedding_dim, self.hidden_size, batch_first=True, bidirectional=True)
         if self.modified:
             self.fc_hidden = nn.Linear(hidden_size * 2, hidden_size)
         
@@ -75,7 +76,8 @@ class Decoder(nn.Module):
         
         # GRU layer
         self.embedding = nn.Embedding(self.vocab_size, self.embedding_dim)
-        self.gru = nn.GRU(self.embedding_dim + self.hidden_size * 2, self.hidden_size, batch_first=True)
+        # self.gru = nn.GRU(self.embedding_dim + self.hidden_size * 2, self.hidden_size, batch_first=True)
+        self.gru = nn.LSTM(self.embedding_dim, self.hidden_size, batch_first=True, bidirectional=True)
         self.out = nn.Linear(self.hidden_size, self.vocab_size)
     
     def forward(self, dec_input, hidden, enc_out):
